@@ -1,4 +1,4 @@
-import { signOut, posts, loadingPost, saveEditPost, deletePost, editLikes, editComments} from "./data.js";
+import { signOut, posts, loadingPost, saveEditPost, deletePost, editLikes, editComments } from "./data.js";
 
 export const feed = () => {
   const feedTemplate = document.createElement('div');
@@ -73,67 +73,45 @@ export const feed = () => {
   }
 
   loadingPost()
-  .then((arrayPosts) => {
-    feedTemplate.querySelector('#posts-container').innerHTML = "";
-    arrayPosts.forEach((doc) => {
-      createPosts(doc)
+    .then((arrayPosts) => {
+      feedTemplate.querySelector('#posts-container').innerHTML = "";
+      arrayPosts.forEach((doc) => {
+        createPosts(doc)
+      })
     })
-  })
 
   const createPosts = (doc, prepend) => {
     const post = doc.data();
-    const postsOnFeed = document.createElement('section');
-    const postsBox = document.createElement('div');
-    const postedBy = document.createElement('span');
-    const msgPost = document.createElement('textarea');
-    const buttonsWrap = document.createElement('div');
-    const buttonsWrapEdit = document.createElement('div');
     const postsContainer = feedTemplate.querySelector('#posts-container');
+    postsContainer.innerHTML = `
+    <section class='div-posts' data-postid='doc.id'>
+        <div class='posted-box-by box'>
+          <span class='name-user-published">Publicado por ${post.name} em ${post.timestamps}</span>
+        </div>
+        <textarea class='content-post posted-box-text box' disabled='disabled'>${post.post}</textarea>
+        <div class='posted-box-options box' id='option-buttons'></div>
+    </section>
+    `
 
-    postedBy.innerHTML = `Publicado por ${post.name} em ${post.timestamps}`;
-    msgPost.innerHTML = `${post.post}`;
-
-    postsOnFeed.classList.add('div-posts');
-    postsBox.classList.add('posted-box-by', 'box');
-    postedBy.classList.add('name-user-published');
-    msgPost.classList.add('content-post', 'posted-box-text', 'box');
-    buttonsWrap.classList.add('posted-box-options', 'box');
-    buttonsWrapEdit.classList.add('div-edit');
-
-    msgPost.setAttribute('disabled', 'disabled');
-    postsOnFeed.setAttribute('data-postid', doc.id);
-
-    postsOnFeed.append(postsBox, msgPost);
-    postsBox.append(postedBy);
-
+    const buttonsWrap = feedTemplate.querySelector('#option-buttons')
     if (post.userUid === firebase.auth().currentUser.uid) {
-      const editBtn = document.createElement('button');
-      const saveBtn = document.createElement('button');
-      const deleteBtn = document.createElement('button');
-      const selectPrivacy = document.createElement('select');
-      const optionPublic = document.createElement('option');
-      const optionPrivate = document.createElement('option');
+      buttonsWrap.innerHTML = `
+      <div class="div-edit">
+        <button class="btn-icon editBtn"><i class="fas fa-edit icon" aria-hidden="true"></i></button>
+        <button class="i-none btn-icon edit-icon saveBtn"><i class="far fa-save icon" aria-hidden="true"></i></button>
+        <select class="i-none edit-icon" id="select-privacy">
+          <option value="public">Público</option>
+          <option value="private">Privado</option>
+        </select>
+      </div>
+      <button class="btn-icon deleteBtn"><i class="fas fa-trash-alt icon" aria-hidden="true"></i></button>
+      `
 
-      optionPrivate.innerHTML = `Privado`;
-      optionPublic.innerHTML = `Público`;
-      editBtn.innerHTML = `<i class='fas fa-edit icon'></i>`;
-      saveBtn.innerHTML = `<i class='far fa-save icon'></i>`;
-      deleteBtn.innerHTML = `<i class='fas fa-trash-alt icon'></i>`;
-
-      editBtn.classList.add('btn-icon');
-      saveBtn.classList.add('i-none', 'btn-icon', 'edit-icon');
-      selectPrivacy.classList.add('i-none', 'edit-icon');
-      deleteBtn.classList.add('btn-icon');
-
-      selectPrivacy.id = 'select-privacy';
-
-      optionPublic.setAttribute('value', 'public');
-      optionPrivate.setAttribute('value', 'private');
-
-      buttonsWrap.append(buttonsWrapEdit, deleteBtn);
-      buttonsWrapEdit.append(editBtn, saveBtn, selectPrivacy)
-      postsOnFeed.append(buttonsWrap);
-      selectPrivacy.append(optionPublic, optionPrivate)
+      const editBtn = feedTemplate.querySelector('.editBtn');
+      const saveBtn = feedTemplate.querySelector('.saveBtn');
+      const deleteBtn = feedTemplate.querySelector('.deleteBtn');
+      const selectPrivacy = feedTemplate.querySelector('.deleteBtn');
+      const msgPost = feedTemplate.querySelector('.posted-box-text')
 
       const editBtnFunctions = () => {
         saveBtn.classList.remove('i-none');
@@ -144,17 +122,14 @@ export const feed = () => {
       const saveBtnOptions = () => {
         saveBtn.classList.add('i-none');
         selectPrivacy.classList.add('i-none');
-        msgPost.setAttribute('disabled', 'disabled');
 
         const optionPrivacy = feedTemplate.querySelector('#select-privacy')
         const privacyValue = () => {
           return feedTemplate.querySelector('#select-privacy').value;
-        } 
-  
+        }
         optionPrivacy.addEventListener('change', privacyValue);
 
         const changePostPrivacy = privacyValue();
-        
         saveEditPost(msgPost.value, doc.id, changePostPrivacy);
       }
 
@@ -169,41 +144,30 @@ export const feed = () => {
       deleteBtn.addEventListener('click', deletePostBtn);
 
     } else {
-      const likeBtn = document.createElement('button');
-      const numberLikes = document.createElement('div');
-      const commentBtn = document.createElement('button');
-      const commentsOptions = document.createElement('div');
-      const commentsText = document.createElement('textarea');
-      const commentsCancelBtn = document.createElement('button');
-      const commentsPostBtn = document.createElement('button');    
-      const commentsContainer = document.createElement('div');
-      
-      likeBtn.innerHTML = `<i class='fas fa-heart icon'></i>`;
-      numberLikes.innerText = `${doc.data().likes}`;
-      commentBtn.innerHTML = `<i class='fas fa-comments icon'></i>`;
-      commentsCancelBtn.innerHTML = `<i class="far fa-times-circle icon"></i>`
-      commentsPostBtn.innerHTML = `<i class="far fa-check-circle icon"></i>`
-
-      likeBtn.classList.add('btn-icon', 'like');
-      numberLikes.classList.add('numberLikes');
-      commentBtn.classList.add('btn-icon');
-
-      commentsOptions.classList.add('i-none');
-      commentsCancelBtn.classList.add('btn-icon');
-      commentsPostBtn.classList.add('btn-icon', 'sendPost'); 
-      
-      buttonsWrap.append(likeBtn, numberLikes, commentBtn);
-      postsOnFeed.append(buttonsWrap, commentsOptions, commentsContainer);
-      commentsOptions.append(commentsText, commentsPostBtn, commentsCancelBtn);
+      buttonsWrap.innerHTML = `
+      <button class="btn-icon like"><i class="fas fa-heart icon"></i></button>
+      <div class="numberLikes" data-number="number">${doc.data().likes}</div>
+      <button class="btn-icon commentBtn"><i class="fas fa-comments icon"></i></button>
+      <div class="i-none divOptions">
+        <textarea></textarea>
+        <button class="btn-icon sendPost"><i class="far fa-check-circle icon"></i></button>
+        <button class="btn-icon"><i class="far fa-times-circle icon"></i></button>
+      </div>
+      `
+      const likeBtn = feedTemplate.querySelector('.like');
+      const numberLikes = feedTemplate.querySelector('.numberLikes');
+      const commentBtn = feedTemplate.querySelector('.commentBtn');
+      const commentsOptions = feedTemplate.querySelector('.divOptions');
+      const commentsText = feedTemplate.querySelector('.textComment');
+      const commentsPostBtn = feedTemplate.querySelector('.sendPost');
 
       const addLikes = () => {
         const likeId = doc.id;
-        let likes = (doc.data().likes) +1;
+        let likes = (doc.data().likes) + 1;
         editLikes(likes, likeId);
 
-        numberLikes.setAttribute('data', 'number')
         document.querySelector(`.numberLikes[data-number=${likeId}]`) + 1;
-        numberLikes.innerHTML = doc.data().likes =+ likes;
+        numberLikes.innerHTML = doc.data().likes = + likes;
       }
 
       const addComment = () => {
@@ -211,31 +175,22 @@ export const feed = () => {
         editComments(textComment, doc.id);
       }
 
-      // const showComments = () => {
-      //   commentsContainer.innerHTML = `
-      //     <h1>${doc.comments.name} em ${doc.comments.date}</h1>
-      //     <p>${doc.comments.comment}</p>
-      //   `
-      // }
-
-      commentsPostBtn.addEventListener('click', addComment);
-      
       const showOptionsComments = () => {
         commentsOptions.classList.remove('i-none');
       }
-        
+
+      commentsPostBtn.addEventListener('click', addComment);
       likeBtn.addEventListener('click', addLikes);
       commentBtn.addEventListener('click', showOptionsComments);
-      }
-
-
-      if (!prepend) {
-        postsContainer.appendChild(postsOnFeed);
-      } else {
-        postsContainer.prepend(postsOnFeed);
-      }
     }
 
+    if (!prepend) {
+      const postsOnFeed = feedTemplate.querySelector('.div-posts');
+      postsContainer.appendChild(postsOnFeed);
+    } else {
+      postsContainer.prepend(postsOnFeed);
+    }
+  }
 
   feedTemplate.querySelector('#share-post').addEventListener('click', (e) => {
     e.preventDefault()
