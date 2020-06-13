@@ -82,18 +82,22 @@ export const feed = () => {
 
   const createPosts = (doc, prepend) => {
     const post = doc.data();
-    const postsContainer = feedTemplate.querySelector('#posts-container');
-    postsContainer.innerHTML = `
-    <section class='div-posts' data-postid='doc.id'>
-        <div class='posted-box-by box'>
-          <span class='name-user-published">Publicado por ${post.name} em ${post.timestamps}</span>
-        </div>
-        <textarea class='content-post posted-box-text box' disabled='disabled'>${post.post}</textarea>
-        <div class='posted-box-options box' id='option-buttons'></div>
-    </section>
+    const postsContainer = feedTemplate.querySelector("#posts-container");
+    const postsOnFeed = document.createElement("section");
+    const buttonsWrap = document.createElement('div');
+    buttonsWrap.classList.add('posted-box-options', 'box');
+    postsOnFeed.classList.add("div-posts");
+    postsOnFeed.innerHTML = ` 
+      <div class='posted-box-by box'>
+        <span class='name-user-published'>Publicado por ${post.name} em ${post.timestamps}</span>
+      </div>
+      <div class='posted-box-text box'>
+        <p class='content-post'>${post.post}</p>
+      </div>
     `
+    postsContainer.appendChild(postsOnFeed);  
 
-    const buttonsWrap = feedTemplate.querySelector('#option-buttons')
+
     if (post.userUid === firebase.auth().currentUser.uid) {
       buttonsWrap.innerHTML = `
       <div class="div-edit">
@@ -106,14 +110,19 @@ export const feed = () => {
       </div>
       <button class="btn-icon deleteBtn"><i class="fas fa-trash-alt icon" aria-hidden="true"></i></button>
       `
+      postsOnFeed.appendChild(buttonsWrap);  
 
       const editBtn = feedTemplate.querySelector('.editBtn');
+      editBtn.setAttribute('data', 'edit');
       const saveBtn = feedTemplate.querySelector('.saveBtn');
       const deleteBtn = feedTemplate.querySelector('.deleteBtn');
       const selectPrivacy = feedTemplate.querySelector('.deleteBtn');
-      const msgPost = feedTemplate.querySelector('.posted-box-text')
+      const msgPost = feedTemplate.querySelector('.posted-box-text');
+      msgPost.setAttribute('disabled', 'disabled');
 
-      const editBtnFunctions = () => {
+      const editBtnFunctions = (event) => {
+        const id = event.currentTarget.dataSet.id;
+        document.querySelector(`.editBtn[id='${id}']`);
         saveBtn.classList.remove('i-none');
         selectPrivacy.classList.remove('i-none');
         msgPost.removeAttribute('disabled');
@@ -145,15 +154,16 @@ export const feed = () => {
 
     } else {
       buttonsWrap.innerHTML = `
-      <button class="btn-icon like"><i class="fas fa-heart icon"></i></button>
-      <div class="numberLikes" data-number="number">${doc.data().likes}</div>
-      <button class="btn-icon commentBtn"><i class="fas fa-comments icon"></i></button>
-      <div class="i-none divOptions">
+      <button class='btn-icon like'><i class='fas fa-heart icon'></i></button>
+      <div class='numberLikes" data-number='number'>${doc.data().likes}</div>
+      <button class='btn-icon commentBtn'><i class='fas fa-comments icon'></i></button>
+      <div class='i-none divOptions'>
         <textarea></textarea>
-        <button class="btn-icon sendPost"><i class="far fa-check-circle icon"></i></button>
-        <button class="btn-icon"><i class="far fa-times-circle icon"></i></button>
+        <button class='btn-icon sendPost'><i class='far fa-check-circle icon'></i></button>
+        <button class='btn-icon'><i class='far fa-times-circle icon'></i></button>
       </div>
       `
+      postsOnFeed.appendChild(buttonsWrap);
       const likeBtn = feedTemplate.querySelector('.like');
       const numberLikes = feedTemplate.querySelector('.numberLikes');
       const commentBtn = feedTemplate.querySelector('.commentBtn');
@@ -166,6 +176,7 @@ export const feed = () => {
         let likes = (doc.data().likes) + 1;
         editLikes(likes, likeId);
 
+        numberLikes.setAttribute('data', 'number')
         document.querySelector(`.numberLikes[data-number=${likeId}]`) + 1;
         numberLikes.innerHTML = doc.data().likes = + likes;
       }
@@ -185,7 +196,6 @@ export const feed = () => {
     }
 
     if (!prepend) {
-      const postsOnFeed = feedTemplate.querySelector('.div-posts');
       postsContainer.appendChild(postsOnFeed);
     } else {
       postsContainer.prepend(postsOnFeed);
