@@ -33,11 +33,6 @@ button, input {
 	background: white;
 }
 
-.profile-picture {
-	border-radius: 6%;
-	width: 270px;
-}
-
 input:focus, button:focus, select:focus {
 	box-shadow: 0 0 0 0;
 	border: 0 none;
@@ -80,14 +75,6 @@ textarea:focus {
 	padding: 8px 15px;
 	transition: all 0.5s;
 }
-/* 
-.btn-send {
-	background: #ffcc6b;
-	color: #aa6324;
-	height: 45px;
-	transition: all 0.5s;
-	width: 100px!important;
-} */
 
 .input:hover {
 	background: #fa8210;
@@ -488,13 +475,11 @@ nav li.sign-out {
 }
 
 .profile-btns {
-
 	background-image: -webkit-linear-gradient(45deg, #ff9c51 50%, transparent 50%);
     background-image: linear-gradient(45deg, #ff9c51 50%, transparent 50%);
     background-position: 99%;
     background-size: 400%;
     border: 2px solid #ff9c518a;
-    /* border: 2px solid #ff9c51; */
     border-radius: 50px;
     box-shadow: 0 0 0.2em #e76d0080;
     color: #a85b2b;
@@ -502,18 +487,6 @@ nav li.sign-out {
     padding: 16px;
     transition: all 0.3s ease-in-out;
 		width: 210px;
-		
-
-  /* background-image: -webkit-linear-gradient(45deg, #ff9c51 50%, transparent 50%);
-  background-image: linear-gradient(45deg, #ff9c51 50%, transparent 50%);
-  background-position: 100%;
-	background-size: 400%;
-	border: 2px solid #ff9c51;  
-	border-radius: 50px;
-	margin: 10px auto;
-	padding: 16px;
-	transition: all 300ms ease-in-out;
-	width: 210px; */
 }
 
 .profile-btns:hover {
