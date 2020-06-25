@@ -386,7 +386,6 @@ nav li.sign-out {
 
 .page-feed .btn-option-post {
   display: flex;
-  
 }
 
 .page-feed .div-posts .div-edit .edit-icon {
@@ -575,13 +574,17 @@ nav li.sign-out {
 	border-radius: 5px;
 }
 
-/* .posts-profile-page.div-posts {
-  margin: 0px;
-} */
+.posts-profile-page.div-posts {
+  margin: 0px 0px 25px 0px;
+}
 
 .personal-infos img {
 	max-height: 240px;
 	max-width: 240px;
+}
+
+.comments-post-profile {
+  padding-bottom: 5px;
 }
 
 .modal {
