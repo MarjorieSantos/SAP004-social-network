@@ -442,8 +442,52 @@ nav li.sign-out {
 	margin: 25px 15px;
 }
 
+.page-feed .comments-box {
+	align-items: center;
+	display: flex;
+	justify-content: space-evenly;
+	padding: 30px 0;
+}
+
 .page-feed .post-comment { 
 	padding: 10px 0px;
+}
+
+.page-feed .textarea-post-comment {
+	background: #fae39a5c;
+	border: 2px solid #ff980063;
+	border-radius: 5px;
+	height: 70px;
+	width: 70%;
+}
+
+.page-feed .comments-btns {
+	display: flex;
+	flex-direction: column;
+}
+
+.page-feed .like {
+	color: rgb(255, 44, 44);
+}
+
+.page-feed .like .icon:hover {
+	color: rgb(168, 1, 1);
+}
+
+.page-feed .btn-send {
+	color: rgb(60, 197, 60);
+}
+
+.page-feed .btn-send .icon:hover {
+	color: green;
+}
+
+.page-feed .btn-cancel {
+	color: rgb(255, 44, 44);
+}
+
+.page-feed .btn-cancel .icon:hover {
+	color: rgb(168, 1, 1);
 }
 
 .page-feed .commented-by {
