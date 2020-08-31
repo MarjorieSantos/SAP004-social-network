@@ -66,7 +66,7 @@ export const feed = () => {
             </section>
             <article class='feed-posts-container' id='posts-container'></article>
           </div>
-        </main>;
+        </main>
       `;
 
       const imageUserNotFound = feedTemplate.querySelector('#img-profile');
