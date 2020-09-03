@@ -21,7 +21,7 @@ export const posts = (text, value) => {
     timestamps: firebase.firestore.Timestamp.fromDate(new Date()).toDate().toLocaleString('pt-BR'),
     privacy: value,
     commentsCount: 0,
-    getDate: new Date().getTime()
+    getTime: new Date().getTime()
   };
   return firebase
     .firestore()
@@ -37,7 +37,7 @@ export const loadingPost = () => firebase
   .collection('posts')
   .where('privacy', '==', 'public')
   .limit(10)
-  .orderBy('timestamps', 'desc')
+  .orderBy('getTime', 'desc')
   .get()
   .then((querySnapshot) => {
     const arrayWithPosts = [];
