@@ -100,9 +100,7 @@ export const feed = () => {
         loadingPost()
           .then((arrayPosts) => {
             feedTemplate.querySelector('#posts-container').innerHTML = '';
-            arrayPosts.forEach((docPosts) => {
-              createPosts(docPosts);
-            });
+            arrayPosts.forEach((docPosts) => createPosts(docPosts));
           });
       };
       loadAllPosts();
@@ -144,21 +142,15 @@ export const feed = () => {
         const likesInPosts = postInfo.likes;
         if (likesInPosts.length === 0) {
           addLike(postId)
-            .then(() => {
-              loadAllPosts();
-            });
+            .then(() => loadAllPosts());
         } else {
           for (let i = 0; i < likesInPosts.length; i += 1) {
             if (likesInPosts[i].userId === currentUser) {
               deleteLike(postId, likesInPosts[i])
-                .then(() => {
-                  loadAllPosts();
-                });
+                .then(() => loadAllPosts());
             } else {
               addLike(postId)
-                .then(() => {
-                  loadAllPosts();
-                });
+                .then(() => loadAllPosts());
             }
           }
         }
@@ -245,9 +237,9 @@ export const feed = () => {
               const saveEditedComment = btnCommentsContainer.querySelector('.save-edited-comment');
               const commentTextarea = btnCommentsContainer.querySelector('.textareaComments');
 
-              btnCommentsContainer.querySelector('.edit-comment').addEventListener('click', () => { editBtnFunctionsComment(saveEditedComment, commentTextarea); });
-              btnCommentsContainer.querySelector('.save-edited-comment').addEventListener('click', () => { saveBtnOptionsComments(postId, postInfo, saveEditedComment, commentTextarea, x); });
-              btnCommentsContainer.querySelector('.delete').addEventListener('click', () => { deleteCommentBtn(postId, postInfo, confirmDeleteComment, optionYes, optionNo, x); });
+              btnCommentsContainer.querySelector('.edit-comment').addEventListener('click', () => editBtnFunctionsComment(saveEditedComment, commentTextarea));
+              btnCommentsContainer.querySelector('.save-edited-comment').addEventListener('click', () => saveBtnOptionsComments(postId, postInfo, saveEditedComment, commentTextarea, x));
+              btnCommentsContainer.querySelector('.delete').addEventListener('click', () => deleteCommentBtn(postId, postInfo, confirmDeleteComment, optionYes, optionNo, x));
 
               commentsContainer.append(btnCommentsContainer);
             }
@@ -332,9 +324,9 @@ export const feed = () => {
           postsOnFeed.append(buttonsWrap);
           selectPrivacy.append(optionPublic, optionPrivate);
 
-          editBtn.addEventListener('click', () => { editBtnFunctions(saveBtn, selectPrivacy, msgPost); });
-          saveBtn.addEventListener('click', () => { saveBtnOptions(postId, saveBtn, selectPrivacy, msgPost); });
-          deleteBtn.addEventListener('click', () => { deletePostBtn(postId, optionYes, optionNo, confirmDeletePost); });
+          editBtn.addEventListener('click', () => editBtnFunctions(saveBtn, selectPrivacy, msgPost));
+          saveBtn.addEventListener('click', () => saveBtnOptions(postId, saveBtn, selectPrivacy, msgPost));
+          deleteBtn.addEventListener('click', () => deletePostBtn(postId, optionYes, optionNo, confirmDeletePost));
         } else {
           const likeBtn = document.createElement('button');
           const numberLikes = document.createElement('div');
@@ -377,10 +369,10 @@ export const feed = () => {
           commentsOptions.append(commentsText, commentsBtns);
           commentsBtns.append(commentsPostBtn, commentsCancelBtn);
 
-          commentsPostBtn.addEventListener('click', () => { addComment(postId, commentsText); });
-          commentsCancelBtn.addEventListener('click', () => { cancelComment(commentsOptions); });
-          likeBtn.addEventListener('click', () => { addLikes(postInfo, postId); });
-          commentBtn.addEventListener('click', () => { showOptionsComments(commentsOptions, commentsText); });
+          commentsPostBtn.addEventListener('click', () => addComment(postId, commentsText));
+          commentsCancelBtn.addEventListener('click', () => cancelComment(commentsOptions));
+          likeBtn.addEventListener('click', () => addLikes(postInfo, postId));
+          commentBtn.addEventListener('click', () => showOptionsComments(commentsOptions, commentsText));
         }
 
         if (!prepend) {

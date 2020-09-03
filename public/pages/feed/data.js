@@ -21,6 +21,7 @@ export const posts = (text, value) => {
     timestamps: firebase.firestore.Timestamp.fromDate(new Date()).toDate().toLocaleString('pt-BR'),
     privacy: value,
     commentsCount: 0,
+    getDate: new Date().getTime()
   };
   return firebase
     .firestore()
