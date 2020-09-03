@@ -146,15 +146,10 @@ export const inscribePage = () => {
       withError = true;
       showWrongInputInformation.push('E-mail inválido');
     }
-    if (errorCode === 'auth/email-already-in-use') {
-      withError = true;
-      showWrongInputInformation.push('Este e-mail já está sendo usado');
-    }
     if (calcAge(userAge) < '18') {
       withError = true;
       showWrongInputInformation.push('Você precisa ter mais de 18 anos para se cadastrar');
     }
-
     if (!withError) {
       register(email, password, firstName, lastName, userAge, bio);
       window.location.href = '#login';
