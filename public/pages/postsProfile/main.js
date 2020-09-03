@@ -39,19 +39,12 @@ export const userProfilePageWithPosts = () => {
 
   const commentComponent = (comment) => {
     const commentPostUser = document.createElement('div');
-    const commentBy = document.createElement('div');
-    const commentText = document.createElement('textarea');
-
     commentPostUser.classList.add('comments-container');
-    commentBy.classList.add('commented-by');
-    commentText.classList.add('textareaComments');
-    commentText.setAttribute('disabled', 'disabled');
 
-    commentText.setAttribute('rows', '5');
-
-    commentBy.innerHTML = `${comment.name} em ${comment.date}`;
-    commentText.innerHTML = `${comment.comment}`;
-    commentPostUser.append(commentBy, commentText);
+    commentPostUser.innerHTML = `
+      <div class='commented-by'>${comment.name} em ${comment.date}</div>
+      <textarea class='textareaComments' disabled rows='5'>${comment.comment}</textarea>
+    `
 
     return commentPostUser;
   };
